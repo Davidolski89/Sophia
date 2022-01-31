@@ -1,0 +1,19 @@
+﻿@model TakeSurveyViewModel
+@{
+    var ratingResult = Model.CurrentQuestionAnswer.Question.RatingDesign.GetRatingResult();
+}
+<div>
+    <div class="row justify-content-between" >
+        <span class="col-3">@ratingResult.FromToWords[0]</span>
+        <span class="col-3 text-right">@ratingResult.FromToWords[1]</span>
+    </div>
+    <div class="row mt-3 ">
+        @for (int i = 0; i < ratingResult.RatingSteps; i++)
+        {
+        <div class="col align-bottom">
+            <label class="col text-center">@i</label>
+            <input class="col" type="radio" asp-for="@Model.CurrentQuestionAnswer.Answer.RatingAnswer" id="rating@(i)" value="@i" />
+        </div>
+        }
+    </div>
+</div>

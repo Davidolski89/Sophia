@@ -1,0 +1,161 @@
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" TEXT NOT NULL CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY,
+    "ProductVersion" TEXT NOT NULL
+);
+
+BEGIN TRANSACTION;
+
+CREATE TABLE "AspNetRoles" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_AspNetRoles" PRIMARY KEY,
+    "Name" TEXT NULL,
+    "NormalizedName" TEXT NULL,
+    "ConcurrencyStamp" TEXT NULL
+);
+
+CREATE TABLE "AspNetUsers" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_AspNetUsers" PRIMARY KEY,
+    "UserName" TEXT NULL,
+    "NormalizedUserName" TEXT NULL,
+    "Email" TEXT NULL,
+    "NormalizedEmail" TEXT NULL,
+    "EmailConfirmed" INTEGER NOT NULL,
+    "PasswordHash" TEXT NULL,
+    "SecurityStamp" TEXT NULL,
+    "ConcurrencyStamp" TEXT NULL,
+    "PhoneNumber" TEXT NULL,
+    "PhoneNumberConfirmed" INTEGER NOT NULL,
+    "TwoFactorEnabled" INTEGER NOT NULL,
+    "LockoutEnd" TEXT NULL,
+    "LockoutEnabled" INTEGER NOT NULL,
+    "AccessFailedCount" INTEGER NOT NULL
+);
+
+CREATE TABLE "Merch" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_Merch" PRIMARY KEY AUTOINCREMENT,
+    "Name" TEXT NULL,
+    "Description" TEXT NULL,
+    "Price" REAL NOT NULL,
+    "Url" TEXT NULL,
+    "Path" TEXT NULL,
+    "Type" INTEGER NOT NULL,
+    "Added" TEXT NOT NULL
+);
+
+CREATE TABLE "Surveys" (
+    "SurveyId" INTEGER NOT NULL CONSTRAINT "PK_Surveys" PRIMARY KEY AUTOINCREMENT,
+    "Title" TEXT NULL,
+    "Description" TEXT NULL,
+    "Active" INTEGER NOT NULL,
+    "Created" TEXT NOT NULL
+);
+
+CREATE TABLE "AspNetRoleClaims" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_AspNetRoleClaims" PRIMARY KEY AUTOINCREMENT,
+    "RoleId" TEXT NOT NULL,
+    "ClaimType" TEXT NULL,
+    "ClaimValue" TEXT NULL,
+    CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserClaims" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_AspNetUserClaims" PRIMARY KEY AUTOINCREMENT,
+    "UserId" TEXT NOT NULL,
+    "ClaimType" TEXT NULL,
+    "ClaimValue" TEXT NULL,
+    CONSTRAINT "FK_AspNetUserClaims_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserLogins" (
+    "LoginProvider" TEXT NOT NULL,
+    "ProviderKey" TEXT NOT NULL,
+    "ProviderDisplayName" TEXT NULL,
+    "UserId" TEXT NOT NULL,
+    CONSTRAINT "PK_AspNetUserLogins" PRIMARY KEY ("LoginProvider", "ProviderKey"),
+    CONSTRAINT "FK_AspNetUserLogins_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserRoles" (
+    "UserId" TEXT NOT NULL,
+    "RoleId" TEXT NOT NULL,
+    CONSTRAINT "PK_AspNetUserRoles" PRIMARY KEY ("UserId", "RoleId"),
+    CONSTRAINT "FK_AspNetUserRoles_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_AspNetUserRoles_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "AspNetUserTokens" (
+    "UserId" TEXT NOT NULL,
+    "LoginProvider" TEXT NOT NULL,
+    "Name" TEXT NOT NULL,
+    "Value" TEXT NULL,
+    CONSTRAINT "PK_AspNetUserTokens" PRIMARY KEY ("UserId", "LoginProvider", "Name"),
+    CONSTRAINT "FK_AspNetUserTokens_AspNetUsers_UserId" FOREIGN KEY ("UserId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "MerchSophiaUser" (
+    "MerchId" INTEGER NOT NULL,
+    "SophiaUsersId" TEXT NOT NULL,
+    CONSTRAINT "PK_MerchSophiaUser" PRIMARY KEY ("MerchId", "SophiaUsersId"),
+    CONSTRAINT "FK_MerchSophiaUser_AspNetUsers_SophiaUsersId" FOREIGN KEY ("SophiaUsersId") REFERENCES "AspNetUsers" ("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_MerchSophiaUser_Merch_MerchId" FOREIGN KEY ("MerchId") REFERENCES "Merch" ("Id") ON DELETE CASCADE
+);
+
+CREATE TABLE "Questions" (
+    "QuestionId" INTEGER NOT NULL CONSTRAINT "PK_Questions" PRIMARY KEY AUTOINCREMENT,
+    "SurveyId" INTEGER NOT NULL,
+    "SurveyId1" INTEGER NULL,
+    "Type" INTEGER NOT NULL,
+    "QuestionText" TEXT NULL,
+    "OpenEndedAnswer" TEXT NULL,
+    "ClosedEndedAnswerDesign" TEXT NULL,
+    "RatingAnswer" INTEGER NOT NULL,
+    "RatingDesign" TEXT NULL,
+    "MultipleChoiceAnswer" TEXT NULL,
+    "MultipleChoiceAnswerDesign" TEXT NULL,
+    "Category" INTEGER NOT NULL,
+    "SubCategory" INTEGER NOT NULL,
+    CONSTRAINT "FK_Questions_Surveys_SurveyId" FOREIGN KEY ("SurveyId") REFERENCES "Surveys" ("SurveyId") ON DELETE CASCADE,
+    CONSTRAINT "FK_Questions_Surveys_SurveyId1" FOREIGN KEY ("SurveyId1") REFERENCES "Surveys" ("SurveyId") ON DELETE RESTRICT
+);
+
+CREATE TABLE "Answeres" (
+    "AnswerId" INTEGER NOT NULL CONSTRAINT "PK_Answeres" PRIMARY KEY AUTOINCREMENT,
+    "QuestionId" INTEGER NOT NULL,
+    "SessionId" TEXT NULL,
+    "OpenEndedAnswer" TEXT NULL,
+    "ClosedEndedAnswer" INTEGER NULL,
+    "RatingAnswer" INTEGER NULL,
+    "MultipleChoiceAnswer" TEXT NULL,
+    "QuestionType" INTEGER NOT NULL,
+    "SophiaUserId" TEXT NULL,
+    CONSTRAINT "FK_Answeres_AspNetUsers_SophiaUserId" FOREIGN KEY ("SophiaUserId") REFERENCES "AspNetUsers" ("Id") ON DELETE RESTRICT,
+    CONSTRAINT "FK_Answeres_Questions_QuestionId" FOREIGN KEY ("QuestionId") REFERENCES "Questions" ("QuestionId") ON DELETE CASCADE
+);
+
+CREATE INDEX "IX_Answeres_QuestionId" ON "Answeres" ("QuestionId");
+
+CREATE INDEX "IX_Answeres_SophiaUserId" ON "Answeres" ("SophiaUserId");
+
+CREATE INDEX "IX_AspNetRoleClaims_RoleId" ON "AspNetRoleClaims" ("RoleId");
+
+CREATE UNIQUE INDEX "RoleNameIndex" ON "AspNetRoles" ("NormalizedName");
+
+CREATE INDEX "IX_AspNetUserClaims_UserId" ON "AspNetUserClaims" ("UserId");
+
+CREATE INDEX "IX_AspNetUserLogins_UserId" ON "AspNetUserLogins" ("UserId");
+
+CREATE INDEX "IX_AspNetUserRoles_RoleId" ON "AspNetUserRoles" ("RoleId");
+
+CREATE INDEX "EmailIndex" ON "AspNetUsers" ("NormalizedEmail");
+
+CREATE UNIQUE INDEX "UserNameIndex" ON "AspNetUsers" ("NormalizedUserName");
+
+CREATE INDEX "IX_MerchSophiaUser_SophiaUsersId" ON "MerchSophiaUser" ("SophiaUsersId");
+
+CREATE INDEX "IX_Questions_SurveyId" ON "Questions" ("SurveyId");
+
+CREATE INDEX "IX_Questions_SurveyId1" ON "Questions" ("SurveyId1");
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20211103000004_initial', '5.0.9');
+
+COMMIT;

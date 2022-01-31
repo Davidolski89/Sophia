@@ -1,0 +1,70 @@
+﻿@model List<Survey>
+
+@{
+    ViewData["Title"] = "Pytania";
+}
+
+
+<h3 class="col text-center">Survey Overview</h3>
+<form asp-action="CreateSurvey" method="get"><button class="btn btn-primary">Create survey</button></form>
+<p>Surveys: @Model.Count Active: @Model.Where(x => x.Active).Count()</p>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="d-inline-block col-6">Title</th>
+            <th class="d-inline-block col-2">Quesetions</th>
+            <th class="d-inline-block col-1">Status</th>
+            <th class="d-inline-block col-1">Edit </th>
+            <th class="d-inline-block col-1">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ foreach (Survey survey in Model)
+            {
+                <tr>
+                    <td class="d-inline-block col-6 text-truncate">@survey.Title</td>
+                    <td class="d-inline-block col-2">@survey.Questions.Count</td>
+                    @if (survey.Active)
+                    {
+                        <td class="text-success d-inline-block col-1">active</td>
+                    }
+                    else
+                    {
+                        <td class="text-danger d-inline-block col-1">disabled</td>
+                    }
+                    @* <td class="d-inline-block col-1">@Html.ActionLink("Edit", "EditSurvey", "Pytania", new { id = survey.SurveyId })</td>*@
+                    <td class="d-inline-block col-1"><form method="get" asp-action="EditSurvey"><input type="hidden" asp-for="@survey" name="id" value="@survey.SurveyId" /><button class="btn btn-sm btn-warning">Edit</button></form></td>
+                    <td class="d-inline-block col-1">
+                        <div>
+                            <button type="button" class="btn btn-sm btn-danger " data-toggle="modal" data-target=".discardModal@(survey.SurveyId)">delete</button>
+                        </div>
+                        <div class="modal fade discardModal@(survey.SurveyId)" id="" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Are you sure?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>All questions will be lost.</p>
+                                        <div class="row justify-content-center">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form class="col-5" asp-action="DeleteSurvey" method="get">
+                                                <input type="hidden" asp-for="@(survey.SurveyId)" name="id" value="@survey.SurveyId" />
+                                                <button type="submit" class="btn btn-danger col-12">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }}
+    </tbody>
+
+
+</table>

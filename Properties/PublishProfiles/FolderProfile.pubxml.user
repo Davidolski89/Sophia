@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Downloads\JDownloader\Release\Sophia</_PublishTargetUrl>
+    <History>True|2021-10-12T15:08:40.6568567Z;True|2021-09-24T10:47:56.7123173+02:00;True|2021-09-20T14:39:07.4976328+02:00;True|2021-09-20T14:38:20.3044383+02:00;True|2021-09-12T09:23:55.7444634+02:00;</History>
+  </PropertyGroup>
+</Project>

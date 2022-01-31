@@ -1,0 +1,50 @@
+﻿@model Survey
+@{
+    ViewData["Title"] = "Rearrange Survey";
+}
+
+<div class="mb-2"><span class="text-danger">Warning: Change only if survey has NOT been taken by anyone.</span></div>
+<div class="row col  mb-2">
+    <button id="rearrangeButton" class="btn btn-warning justify-content-start">Save changes</button>
+    <span id="console" class="text-center align-middle ml-2"></span>
+    <div id="spiner" style="display:none;" class="spinner-border ml-2" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+
+
+<table class="table" data-surveyid="@Model.SurveyId">
+    <thead>
+        <tr>
+            <th class="d-inline-block col-1 ">#</th>
+            <th class="d-inline-block col-2">Type</th>
+            <th class="d-inline-block col-6">Question</th>
+            <th class="d-inline-block col-1">Down</th>
+            <th class="d-inline-block col-1">Up</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int zahl = 1;}
+        @foreach (Question question in Model.Questions)
+        {
+            <tr data-qid="@question.QuestionId" class="ArrangeItem">
+                <td class="d-inline-block col-1">@(zahl++)</td>
+                <td class="d-inline-block col-2">@question.Type</td>
+                <td class="d-inline-block col-6">@question.QuestionText</td>
+                <td class="d-inline-block col-1">
+                    <button class="btn rearrangeDown">
+                        <img src="~/Sophia/media/arrow-down.svg" />
+                    </button>
+                </td>
+                <td class="d-inline-block col-1">
+                    <button class="btn rearrangeUp">
+                        <img src="~/Sophia/media/arrow-up.svg" />
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<script src="~/Sophia/js/rearrange.js" asp-append-version="true"></script>

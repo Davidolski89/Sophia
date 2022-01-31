@@ -1,0 +1,89 @@
+﻿@model TakeSurveyViewModel
+@{
+    Layout = "_LayoutMobile";
+    ViewData["Title"] = "Survey";
+}
+
+<div class="">
+    <form class="shadow-lg">
+        <input type="hidden" asp-for="@Model.CurrentQuestionAnswer.Question.QuestionId" />
+        <div class="card row">
+            <div class="card-header text-white bg-secondary  col">
+                <div class="row justify-content-between">
+                    <span class="col">Question @(Model.CurrentNo+1) of @Model.QuestionsNo</span>
+                    <a class="col-2 mr-2 btn btn-danger" asp-action="AbortTake">Abort</a>
+                </div>
+            </div>           
+            <input type="hidden" asp-for="@Model.CurrentQuestionAnswer.Answer.QuestionType" />
+
+            <div class="card-body form-group col">
+                <p class="card-text">@Model.CurrentQuestionAnswer.Question.QuestionText</p>
+                @switch (Model.CurrentQuestionAnswer.Question.Type)
+                {
+                    case QuestionType.OpenEnded:
+                        <partial name="~/Views/Survey/Partial/_OpenEnded.cshtml" />
+                        break;
+                    @*case QuestionType.ClosedEnded:
+                        <partial name="~/Views/Survey/Partial/_ClosedEnded.cshtml" />
+                        break;*@
+                    case QuestionType.Rating:
+                        <partial name="~/Views/Survey/Partial/_Rating.cshtml" />
+                        break;
+                    case QuestionType.MultipleChoice:
+                        <partial name="~/Views/Survey/Partial/_MultipleChoice.cshtml" />
+                        break;
+                    default:
+                        break;
+                }
+
+            </div>
+            <div class="row col justify-content-around mb-3">
+                <button class="btn btn-primary col-3  " type="submit" asp-action="PreviousQuestion" formmethod="post">previous</button>
+                @if (Model.CurrentQuestionAnswer.Answer.AnswerAnswered())
+                {
+                    <button class="btn btn-primary col-3 " type="submit" asp-action="NextQuestion" formmethod="post">change</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary col-3 " type="submit" asp-action="NextQuestion" formmethod="post">answer</button>
+                }
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<div class="row mt-5">
+    <button class="btn btn-primary btn-lg col" type="button" data-toggle="collapse" data-target="#collapsablequestions" aria-expanded="false" aria-controls="collapsablequestions">
+        Select question
+    </button>
+</div>
+
+<div class="collapse" id="collapsablequestions">
+    <ul class="list-group ">
+        @{ int counter = 1;}
+        @foreach (QuestionAnswer questionAnswer in Model.QuestionAnswers)
+        {
+            <li class="list-group-item row p-1 @(questionAnswer.Answer.AnswerAnswered() ?  "bg-success text-white" :  "bg-danger text-white")">
+                <p class="col row justify-content-between m-0">
+                    <a class="col-4 btn btn-secondary" asp-action="JumpToQuestion" asp-route-no="@counter">Go to </a>
+                    <span>Question @(counter++) </span>
+                    @if (questionAnswer.Answer.AnswerAnswered())
+                    {
+                        <span class="col-3 ">(answered)</span>
+                    }
+                    else
+                    {
+                        <span class="col-3">(unanswered)</span>
+                    }
+                </p>
+            </li>
+        }
+    </ul>
+</div>
+
+@if (Model.Finished)
+{
+    <form class="row mt-5 " asp-action="SubmitSurvey" method="get"><button class="col btn btn-warning btn-lg">Submit</button></form>
+}

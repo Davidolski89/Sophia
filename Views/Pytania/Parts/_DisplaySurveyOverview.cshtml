@@ -1,0 +1,76 @@
+﻿@model SurveyCreationViewModel
+
+@if (Model.CurrentSurvey != null)
+{
+    
+<div class="col-3" id="surveyOverview">
+    <h3 class="col">Overview</h3>
+    <h4 class="col d-inline-block text-truncate" data-toggle="tooltip" data-placement="left" title="@Model.CurrentSurvey.Title">@Model.CurrentSurvey.Title</h4>
+    @if (Model.CurrentSurvey.Questions != null)
+    {
+        <p class="col">Questions: @Model.CurrentSurvey.Questions.Count</p>
+    }
+    else
+    {
+        <p class="col">Questions: 0</p>
+    }
+
+    <div class="row mb-2">
+        <form class="col-5 offset-1" method="get" action="SaveSurvey"><button class="btn btn-sm btn-info col" type="submit">Save</button></form>
+        <button type="button" class="btn btn-sm btn-danger col-4" data-toggle="modal" data-target=".discardModal">discard</button>
+    </div>
+    <div class="modal fade discardModal" id="" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>All questions will be lost.</p>
+                    <div class="row justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form class="col-5"><button class="btn btn-danger col-12" asp-action="DiscardSurvey" method="get">discard</button></form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.CurrentSurvey.Questions.Count > 0)
+    {
+        <table class="table table-sm">
+            <tr class="">
+                <th class="col-9">Question</th>
+                <th class="col">Type</th>
+            </tr>
+            @foreach (Question question in Model.CurrentSurvey.Questions)
+            {
+                <tr class="">
+                    @if (!String.IsNullOrEmpty(question.QuestionText))
+                    {
+                        @if (question.QuestionText.Length > 14)
+                        {
+                            <td class="col-" data-toggle="tooltip" data-placement="left" title="@question.QuestionText">@question.QuestionText.Substring(0, 14)</td>
+                        }
+                        else
+                        {
+                            <td class="col" data-toggle="tooltip" data-placement="left" title="@question.QuestionText">@question.QuestionText </td>
+                        }
+                    }
+                    else
+                    {
+                        <td class="col" data-toggle="tooltip" data-placement="left" title="empty">"empty"</td>
+                    }
+                    <td>@question.Type.ToString("g")</td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+
+}
+
+

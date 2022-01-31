@@ -1,0 +1,122 @@
+﻿@model EditSurveyViewModel
+@{
+    ViewData["Title"] = "Survey Edit";
+}
+
+<h3 class="d-inline-block text-truncate col">@Model.Survey.Title</h3>
+<form method="post" action="EditSurvey">
+    <input type="hidden" asp-for="@Model.Survey.SurveyId" />
+
+    <div class="form-group">
+        <label asp-for="@Model.Survey.Title"></label>
+        <textarea class="form-control" row="1" asp-for="@Model.Survey.Title"></textarea>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Survey.Description"></label>
+        <textarea class="form-control" rows="3" asp-for="@Model.Survey.Description"></textarea>
+    </div>
+    <div class="form-check form-switch row">
+        <label class="form-check-label col-1" asp-for="@Model.Survey.Active">Active:</label>
+        <input class="form-check-input col-2" asp-for="@Model.Survey.Active" type="checkbox" />
+    </div>
+    <button class="btn btn-warning mt-2" type="submit">Change</button>
+</form>
+
+<div class="row col align-items-start">
+    <form class="mt-2 mb-1 mr-2" method="get" asp-action="AddQuestion">
+        <input type="hidden" asp-for="@Model.Survey.SurveyId" name="id" value="@(Model.Survey.SurveyId)" />
+        <button class="btn btn-primary" type="submit">Add question</button>
+    </form>
+    <form class="mt-2 mb-1" method="get" asp-action="RearrangeSurvey">
+        <input type="hidden" asp-for="@Model.Survey.SurveyId" name="id" value="@(Model.Survey.SurveyId)" />
+        <button class="btn btn-secondary" type="submit">Rearrange questions</button>
+    </form>
+
+</div>
+
+
+
+<table class="col table table-striped table-sm">
+    <thead>
+        <tr>
+            <th class="d-inline-block col-4" scope="col">Question</th>
+            <th class="d-inline-block col-1" scope="col">Type</th>
+            <th class="d-inline-block col-2" scope="col">Answers</th>
+            <th class="d-inline-block col-2" scope="col">Answer</th>
+            <th class="d-inline-block col-1" scope="col">Edit</th>
+            <th class="d-inline-block col-1" scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Question question in Model.Survey.Questions)
+        {
+            <tr data-id="@question.QuestionId">
+                @if (string.IsNullOrEmpty(question.QuestionText))
+                {
+                    <td class="d-inline-block col-4 text-truncate ">"empty"</td>
+                }
+                else
+                {
+                    <td class="d-inline-block col-4 text-truncate ">@question.QuestionText</td>
+                }
+                <td class="d-inline-block col-1 text-truncate">@question.Type</td>
+                @switch (question.Type)
+                {
+                    case QuestionType.OpenEnded:
+                        <td class="d-inline-block col-2 text-truncate"></td>
+                        <td class="d-inline-block col-2 text-truncate">@question.OpenEndedAnswer</td>
+                        break;
+                    @*case QuestionType.ClosedEnded:
+                        <td class="d-inline-block col-2 text-truncate">@question.ClosedEndedAnswerDesign</td>
+                        <td class="d-inline-block col-2 text-truncate">@question.ClosedEndedAnswer</td>
+                        break;*@
+                    case QuestionType.MultipleChoice:
+                        <td class="d-inline-block col-2 text-truncate">@question.MultipleChoiceAnswerDesign</td>
+                        <td class="d-inline-block col-2 text-truncate">@question.MultipleChoiceAnswer</td>
+                        break;
+                    case QuestionType.Rating:
+                        <td class="d-inline-block col-2 text-truncate">@question.RatingDesign</td>
+                        <td class="d-inline-block col-2 text-truncate">@question.RatingAnswer</td>
+                        break;
+                    default:
+                        <td></td>
+                        <td></td>
+                        break;
+                }
+                @*<td class="d-inline-block col-1 ">@Html.ActionLink("Edit", "EditQuestion", new { id = question.QuestionId })</td>*@
+                <td class="d-inline-block col-1 ">
+                    <form class="" method="get" asp-action="EditQuestion">
+                        <input type="hidden" asp-for="@question" name="id" value="@question.QuestionId" />
+                        <button class="btn btn-sm btn-warning" type="submit">Edit</button>
+                    </form>
+                </td>
+                <td class="d-inline-block col-1 ">
+                    <div>
+                        <button type="button" class="btn btn-sm btn-danger " data-toggle="modal" data-target=".discardModal@(question.QuestionId)">delete</button>
+                    </div>
+                    <div class="modal fade discardModal@(question.QuestionId)" id="" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Are you sure?</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Question and depending answers will be lost!!!</p>
+                                    <div class="row justify-content-center">
+                                        <button type="button" class="col-4 offset-1 btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <form class="col-5" method="get" asp-action="DeleteQuestion">
+                                            <input type="hidden" asp-for="@question" name="id" value="@question.QuestionId" />
+                                            <button class="col btn btn-danger" type="submit">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </tr>
+        }
+    </tbody>
+</table>

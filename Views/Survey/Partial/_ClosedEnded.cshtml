@@ -1,0 +1,3 @@
+﻿@model TakeSurveyViewModel
+@*<input class="form-check-input card-text" type="checkbox" asp-for="@Model.CurrentQuestionAnswer.Answer.ClosedEndedAnswer"/>*@
+@Html.CheckBoxFor(m => m.CurrentQuestionAnswer.Answer.ClosedEndedAnswer ?? false);

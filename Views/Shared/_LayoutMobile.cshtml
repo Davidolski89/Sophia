@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sophia</title>
+    <link rel="stylesheet" href="~/Sophia/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Sophia/css/sophia.css" />
+    <link rel="stylesheet" href="~/Sophia/css/mobile.css" />
+</head>
+<body>
+    <header>
+   
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        
+    </footer>
+    <script src="~/Sophia/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/Sophia/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Sophia/js/sophia.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

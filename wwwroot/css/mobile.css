@@ -1,0 +1,12 @@
+﻿body{
+    font-size:24px;
+}
+
+body p {
+    font-size: 20px;
+}
+
+body option,select,button {
+    font-size: 20px;
+}
+

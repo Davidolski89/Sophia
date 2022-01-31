@@ -1,0 +1,5 @@
+﻿@model TakeSurveyViewModel
+
+<select class="form-control card-text" asp-for="@Model.CurrentQuestionAnswer.Answer.MultipleChoiceAnswer" asp-items="@new SelectList(Model.CurrentQuestionAnswer.Question.MultipleChoiceAnswerDesign.GetMultipleChoices())">
+    <option asp-for="@Model.CurrentQuestionAnswer.Answer.MultipleChoiceAnswer" value="">-Select-</option>
+</select>
