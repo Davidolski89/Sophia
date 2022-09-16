@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Sophia.Controllers
 {
+    // In dem Controller werden passieren die Fragebogen-Durchläufe
     public class SurveyController : Controller
     {
         readonly SophiaDB _sophiaDb;

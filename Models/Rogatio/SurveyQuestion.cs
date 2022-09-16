@@ -6,7 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sophia.Models.Rogatio
-{
+{ 
+    // zurzeit nicht verwendet
     public class SurveyQuestion
     {        
         [Key]

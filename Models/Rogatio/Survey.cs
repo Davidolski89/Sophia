@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sophia.Models.Rogatio
 {
+    // Entity Db
     public class Survey
     {
         public int SurveyId { get; set; }

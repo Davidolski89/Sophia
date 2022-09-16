@@ -8,6 +8,7 @@ using Sophia.Models.DataBase;
 
 namespace Sophia.Models.Rogatio
 {
+    // Entity Db
     public class Answer
     {        
         public int AnswerId { get; set; }

@@ -8,6 +8,7 @@ using Sophia.Models.DataBase;
 
 namespace Sophia.Models.Rogatio
 {
+    // Entity Db, nicht verwendet
     public class UserAnswer
     {        
         //[Key]

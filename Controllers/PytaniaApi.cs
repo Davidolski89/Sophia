@@ -21,6 +21,8 @@ namespace Sophia.Controllers
             _sophiaDB = db;
         }
 
+        // Hier wird die Reihenfolge der Fragen geändert
+        // Sollte nur gemacht wenn es keine Ergebnisse (fertige Durchläufe) gibt.
         [HttpPost]
         public IActionResult RearrangeSurvey(Range range)
         {
@@ -35,7 +37,6 @@ namespace Sophia.Controllers
                     var question = originalCloneOrder.Where(c => c.QuestionId == range.qids[i]).FirstOrDefault();
                     QuestionToChange.QuestionText = question.QuestionText;
                     QuestionToChange.OpenEndedAnswer = question.OpenEndedAnswer;
-                    //QuestionToChange.ClosedEndedAnswer = question.ClosedEndedAnswer;
                     QuestionToChange.ClosedEndedAnswerDesign = question.ClosedEndedAnswerDesign;
                     QuestionToChange.RatingDesign = question.RatingDesign;
                     QuestionToChange.RatingAnswer = question.RatingAnswer;
@@ -45,7 +46,6 @@ namespace Sophia.Controllers
                     QuestionToChange.Answers = question.Answers;
                 }
                 _sophiaDB.SaveChanges();
-                //_sophiaDB.Surveys
                 return new JsonResult("Changed successfully");
             }
             catch
@@ -59,8 +59,6 @@ namespace Sophia.Controllers
         {
             public int sid { get; set;  }
             public List<int> qids { get; set; }
-        }
-
-        
+        }        
     }
 }

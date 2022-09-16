@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Sophia.Controllers
 {
+    // Habe ich dummy mässig erstellt falls du Videos etc verkaufen wollen würdest
+    // Hier passiert noch nicht wirklich was
     public class MerchController : Controller
     {
         private readonly SophiaDB _sophiaDB;

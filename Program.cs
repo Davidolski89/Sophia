@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Sophia
 {
+    // Hier Started das Programm. Hier gibts nicht viel zu tun.
+    // Startup.cs beinhalted die wichtigsten Einstellungen für die Anwendung
     public class Program
     {
         public static void Main(string[] args)

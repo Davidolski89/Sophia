@@ -15,6 +15,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Sophia
 {
+    // Die wichtigsten Einstellungen werden hier gesetzt
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -27,12 +28,18 @@ namespace Sophia
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            // Standardmethode um Controller und Views zu verwenden.
             services.AddControllersWithViews();
+
+            // Verzeichnis wird geholt in dem das Programm gestertet wird, damit der Datenbankpfad für die SQLite DB erstellt werden kann.
             var GetDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            // Selbterstellte Klasse zum erstellen der Datenbank mit Hilfe des Skripts Database/SophiaDBCreationString (falls noch nicht erstellt)
             SophiaDB.CheckAndCreateDatabase();
+
+            // Hier wird der DatenbankContext gesetzt. Kannst SophiaDB in jedem Controller aufrufen/verwenden
             services.AddDbContext<SophiaDB>(options => options.UseSqlite($"Data Source={Path.Combine(GetDirectory, "Database", "Sophia.db")}"));
 
+            // Identity Klasse zum speichern von Benutzern
             services.AddIdentity<SophiaUser, IdentityRole>(config =>
             {
                 config.Password.RequireDigit = false;
@@ -43,14 +50,12 @@ namespace Sophia
                 .AddEntityFrameworkStores<SophiaDB>()
                 .AddDefaultTokenProviders();
 
-            //services.ConfigureApplicationCookie(options => {
-            //    options.Cookie.Name = "SophiaCookie";
-            //    options.LoginPath = "/WebDAV/home/login";
-            //    options.LogoutPath = "/WebDAV/home/logout";
-            //    options.AccessDeniedPath = "/WebDAV/home/index";
-            //});
-
+            
+            // Zum zwischenspeichern von SurveyZuständen die User gerade bearbeiten.
             services.AddDistributedMemoryCache();
+
+            // Zum Identifizieren von Usern anhand einer SessionId.
+            // Wird bei jeder anfrage vom Browser des Users an den Server mitgegeben.
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromSeconds(6000);
@@ -85,6 +90,7 @@ namespace Sophia
 
             app.UseSession();
 
+            // Hier wurde die DefaultRoute gesetzt
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

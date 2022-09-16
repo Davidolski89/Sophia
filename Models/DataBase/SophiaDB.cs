@@ -10,6 +10,9 @@ using Sophia.Models.Rogatio;
 
 namespace Sophia.Models.DataBase
 {
+    // Datenbank Context
+    // Schnittstelle von Klassen/Objekten zu Datenbanktabellen
+    // Das DbSet<Survey> ist eine Liste von Objekten vom Typ Survey. Also alle einträge aus der Tabelle Survey in der DB
     public class SophiaDB : IdentityDbContext<SophiaUser>
     {
         public DbSet<Survey> Surveys { get; set; }

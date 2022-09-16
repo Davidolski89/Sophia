@@ -12,6 +12,7 @@ using static Sophia.Data.StaticHelpers;
 
 namespace Sophia.Controllers
 {
+    // Hier werden Fragebögen erstellt
     public class PytaniaController : Controller
     {
         readonly SophiaDB _sophiaDB;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sophia.Models.Rogatio
 {
+    // Entity Db, zurzeit nicht verwendet
     public class SurveyQuestionUserAnswer
     {
         [Key]
